@@ -1,5 +1,7 @@
 <h1 align="center">Practical Work on Sistemas de Informação Organizacionais</h1>
 
+<img src="/.github/assets/Page.png?raw=true"/>
+
 <p>
   <img src="http://img.shields.io/static/v1?style=for-the-badge&label=School%20year&message=2022/2023&color=sucess"/>
   <img src="http://img.shields.io/static/v1?style=for-the-badge&label=Discipline&message=SIO&color=sucess"/>
