@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    ports:
+      - '1434:1433'
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: SQLServer123
+    volumes:
+      - ./mssql_dev/data:/var/opt/mssql/data
+      - ./mssql_dev/log:/var/opt/mssql/log
+      - ./mssql_dev/secrets:/var/opt/mssql/secrets
+      - ./backups:/var/backups

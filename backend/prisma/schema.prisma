@@ -1,0 +1,167 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  name        String
+  password    String
+  numberPhone Int?
+  avatar      String?
+  isBlocked   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Family {
+  id          String       @id
+  name       String    @unique
+}
+
+model Supplier {
+  id          String       @id
+  name        String
+  purchase    Purchase[]
+}
+
+model Purchase {
+  id            String        @id
+  documentType  String
+  supplierId    String
+  date          DateTime
+  netTotal      Decimal       @db.Decimal(9, 2)
+  grossTotal    Decimal       @db.Decimal(9, 2)
+  isDeleted     Boolean
+  isPaid        Boolean
+  supplier      Supplier      @relation(fields: [supplierId], references: [id])
+  purchaseLines  PurchaseLine[]
+}
+
+model PurchaseLine {
+  purchaseId     String
+  itemId        String
+  quantity      Int
+  unitPrice     Decimal       @db.Decimal(9, 2)
+  amount        Decimal       @db.Decimal(9, 2)
+  net_amount    Decimal       @db.Decimal(9, 2)
+  tax_amount    Decimal       @db.Decimal(9, 2)
+  purchase       Purchase       @relation(fields: [purchaseId], references: [id])
+  product        Product        @relation(fields: [itemId], references: [id])
+
+  @@id([purchaseId, itemId])
+}
+
+model Product {
+  id                 String    @id
+  productCode        String    @unique
+  //productNumberCode  String
+  productType        String
+  productGroup       String
+  productDescription String
+  //supplier           Supplier @relation(fields: [supplierId], references: [id])
+  //supplierId         String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  purchaseLines      PurchaseLine[] @relation()
+  invoiceLines       InvoiceLine[] @relation()
+}
+
+model Address {
+  id                Int       @id @default(autoincrement())
+  buildingNumber    String?
+  streetName        String?
+  addressDetail     String
+  city              String
+  postalCode        String
+  region            String?
+  country           String
+  billingCustomers  Customer[] @relation
+  //shippingCustomers Customer[] @relation("shipToAddress", onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Customer {
+  id                   String   @id
+  accountId            String
+  customerTaxId        String
+  companyName          String
+  billingAddress       Address  @relation(fields: [billingAddressId], references: [id])
+  billingAddressId     Int
+  //shipToAddress        Address  @relation("shipToAddress", fields: [shipToAddressId], references: [id])
+  //shipToAddressId      String
+  selfBillingIndicator Int
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model Invoice {
+  id                           String        @id
+  atcud                        String
+  invoiceStatus                String
+  invoiceStatusDate            String
+  sourceId                     String
+  sourceBilling                String
+  hash                         String
+  hashControl                  String
+  period                       String
+  invoiceDate                  DateTime      @default(now())
+  invoiceType                  String
+  selfBillingIndicator         Int
+  cashVatSchemeIndicator       Int
+  thirdPartiesBillingIndicator Int
+  systemEntryDate              String
+  customerId                   String
+  InvoicesLines                InvoiceLine[]
+  taxPayable                   Decimal       @db.Decimal(9, 2)
+  netTotal                     Decimal       @db.Decimal(9, 2)
+  grossTotal                   Decimal       @db.Decimal(9, 2)
+  createdAt                    DateTime      @default(now())
+  updatedAt                    DateTime      @updatedAt
+}
+
+model InvoiceLine {
+  invoiceId          String
+  invoice            Invoice @relation(fields: [invoiceId], references: [id])
+  lineNumber         Int
+  Product            Product @relation(fields: [productCode], references: [productCode])
+  productCode        String  
+  quantity           Int
+  unitOfMeasure      String
+  unitPrice          Decimal  @db.Decimal(9, 2)
+  taxPointDate       DateTime
+  description        String
+  creditAmount       Decimal  @db.Decimal(9, 2)
+  //tax                 Tax?     @relation(fields: [taxCode], references: [taxCode])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  Tax                Tax?     @relation(fields: [taxTaxCode], references: [taxCode])
+  taxTaxCode         String?
+
+  @@id([invoiceId, lineNumber])
+}
+
+model Tax {
+  taxInfo           TaxCode?      @relation(fields: [taxCode], references: [taxCode])
+  taxCode           String        @id
+  taxType           String
+  taxCountryRegion  String
+  taxExpirationDate DateTime
+  taxPercentage     Int
+  taxAmount         Decimal       @db.Decimal(9, 2)
+  year              DateTime
+  InvoicesLines     InvoiceLine[]
+}
+
+model TaxCode {
+  taxCode        String @id
+  taxDescription String
+  Tax            Tax[]
+}

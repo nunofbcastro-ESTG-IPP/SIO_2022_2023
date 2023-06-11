@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    container_name: sqlserver
+    ports:
+      - '1434:1433'
+    networks:
+      - database
+    extends:
+      file: ./sqlserver/docker-compose.prod.yml
+      service: sqlserver
+  backend:
+    container_name: backend
+    ports:
+      - '8080:3000'
+    extends:
+      file: ./backend/docker-compose.prod.yml
+      service: backend
+    networks:
+      - database
+      - backend
+    depends_on:
+      - sqlserver
+  frontend:
+    container_name: frontend
+    ports:
+      - '80:80'
+    extends:
+      file: ./frontend/docker-compose.prod.yml
+      service: frontend
+    networks:
+      - backend
+    depends_on:
+      - backend
+
+networks:
+  database:
+    driver: bridge
+  backend:
+    driver: bridge

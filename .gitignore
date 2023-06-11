@@ -1,0 +1,8 @@
+**/yarn.lock
+**/pnpm-lock.yaml
+**/package-lock.json
+**/node_modules
+**/.vs
+**/*.rar
+**/.history
+./.history
