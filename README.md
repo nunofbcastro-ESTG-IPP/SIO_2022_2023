@@ -1,11 +1,9 @@
 <h1 align="center">Practical Work on Sistemas de Informação Organizacionais</h1>
 
-<img src="/.github/assets/Page.png?raw=true"/>
-
 <p>
   <img src="http://img.shields.io/static/v1?style=for-the-badge&label=School%20year&message=2022/2023&color=sucess"/>
   <img src="http://img.shields.io/static/v1?style=for-the-badge&label=Discipline&message=SIO&color=sucess"/>
-  <img src="http://img.shields.io/static/v1?style=for-the-badge&label=Grade&message=?&color=sucess"/>
+  <img src="http://img.shields.io/static/v1?style=for-the-badge&label=Grade&message=14&color=sucess"/>
   <a href="/.github/assets/GROUP_1_Report.pdf" target="_blank">
     <img src="https://img.shields.io/badge/-Report-grey?style=for-the-badge"/>
   </a>
@@ -14,6 +12,7 @@
   </a>
 </p>
 
+<img src="/.github/assets/Page.png?raw=true"/>
 ---
 
 <h2>Languages</h2>
